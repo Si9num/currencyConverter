@@ -1,11 +1,25 @@
-import optionArr, { arrForField } from "./select";
-import { useState } from "react";
-import { AddField } from "./select";
+import optionArr, { arrForField } from "./select.js";
+import { useEffect, useState } from "react";
+import { AddField } from "./select.js";
 
 import "./App.css";
 
 const Form = () => {
   const [arrForField, setField] = useState([]);
+  const [currency, setCurrency] = useState("USD");
+  const [value, setValue] = useState(1);
+  const [vvalue, setVvalue] = useState(1);
+  const urlList = ` https://api.exchangerate.host/latest?base=${currency}`;
+
+  useEffect(() => {
+    async function t() {
+      const response = await fetch(urlList);
+
+      let res = await response.json();
+      sessionStorage.test = JSON.stringify(res.rates);
+    }
+    t();
+  });
 
   return (
     <div className="mainContainer">
@@ -20,32 +34,74 @@ const Form = () => {
       <div className="fieldContainer">
         <div className="field">
           <label>
-            USD <input type="text" className="inputField"></input>
+            USD{" "}
+            <input
+              value={vvalue}
+              name="USD"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         <div className="field">
           <label>
-            EUR <input type="text" className="inputField"></input>
+            EUR{" "}
+            <input
+              value={JSON.parse(sessionStorage.test)["EUR"]}
+              name="EUR"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         <div className="field">
           <label>
-            BYN <input type="text" className="inputField"></input>
+            BYN{" "}
+            <input
+              value={JSON.parse(sessionStorage.test)["BYN"]}
+              name="BYN"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         <div className="field">
           <label>
-            RUB <input type="text" className="inputField"></input>
+            RUB{" "}
+            <input
+              value={JSON.parse(sessionStorage.test)["RUB"]}
+              name="RUB"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         <div className="field">
           <label>
-            UAH <input type="text" className="inputField"></input>
+            UAH{" "}
+            <input
+              value={JSON.parse(sessionStorage.test)["UAH"]}
+              name="UAH"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         <div className="field">
           <label>
-            PLN <input type="text" className="inputField"></input>
+            PLN{" "}
+            <input
+              value={JSON.parse(sessionStorage.test)["PLN"]}
+              name="PLN"
+              type="number"
+              className="inputField"
+              onChange={(ev) => setCurrency(ev.target.name)}
+            ></input>
           </label>
         </div>
         {arrForField}
@@ -60,7 +116,13 @@ const Form = () => {
                     <div className="field">
                       <label>
                         {ev.target.value}{" "}
-                        <input type="text" className="inputField"></input>
+                        <input
+                          key={ev}
+                          name={ev.target.value}
+                          type="number"
+                          className="inputField"
+                          onChange={(ev) => setCurrency(ev.target.name)}
+                        ></input>
                       </label>
                     </div>,
                   ],

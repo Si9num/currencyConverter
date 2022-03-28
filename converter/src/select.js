@@ -19,6 +19,10 @@ export const arrForVal = [
   "TRY",
   "XDR",
 ];
-const optionArr = arrForVal.map((e) => <option value={e}>{e}</option>);
+const optionArr = arrForVal.map((e) => (
+  <option key={e} value={e}>
+    {e}
+  </option>
+));
 
 export default optionArr;
