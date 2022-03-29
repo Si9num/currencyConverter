@@ -1,0 +1,24 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Roboto", sans-serif;
+}
+.fieldContainer {
+  display: flex;
+  width: 400px;
+  background-color: rgba(35, 155, 155, 0.342);
+  height: auto;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: space-around;
+  align-items: flex-end;
+  border-radius: 10px;
+}
+.field {
+  margin-top: 40px;
+}
+.addVal {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
