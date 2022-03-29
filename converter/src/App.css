@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: "Roboto", sans-serif;
 }
 .fieldContainer {
   display: flex;
@@ -12,6 +13,7 @@
   flex-wrap: wrap;
   align-content: space-around;
   align-items: flex-end;
+  border-radius: 10px;
 }
 .field {
   margin-top: 40px;
