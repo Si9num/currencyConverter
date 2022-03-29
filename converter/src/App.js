@@ -1,15 +1,15 @@
 import optionArr, { arrForField } from "./select.js";
 import { useEffect, useState } from "react";
 import { AddField } from "./select.js";
-
+import DefaultFields from "./defaultFields.js";
+import { store } from "./redux/store.js";
 import "./App.css";
 
 const Form = () => {
   const [arrForField, setField] = useState([]);
   const [currency, setCurrency] = useState("USD");
-  const [value, setValue] = useState(1);
-  const [vvalue, setVvalue] = useState(1);
-  const urlList = ` https://api.exchangerate.host/latest?base=${currency}`;
+  const [val, setVal] = useState(1);
+  const urlList = `${process.env.REACT_APP_URL + currency}`;
 
   useEffect(() => {
     async function t() {
@@ -19,8 +19,7 @@ const Form = () => {
       sessionStorage.test = JSON.stringify(res.rates);
     }
     t();
-  });
-
+  }, [currency, urlList]);
   return (
     <div className="mainContainer">
       <div className="headersContainer">
@@ -32,108 +31,54 @@ const Form = () => {
         </p>
       </div>
       <div className="fieldContainer">
-        <div className="field">
-          <label>
-            USD{" "}
-            <input
-              value={vvalue}
-              name="USD"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        <div className="field">
-          <label>
-            EUR{" "}
-            <input
-              value={JSON.parse(sessionStorage.test)["EUR"]}
-              name="EUR"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        <div className="field">
-          <label>
-            BYN{" "}
-            <input
-              value={JSON.parse(sessionStorage.test)["BYN"]}
-              name="BYN"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        <div className="field">
-          <label>
-            RUB{" "}
-            <input
-              value={JSON.parse(sessionStorage.test)["RUB"]}
-              name="RUB"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        <div className="field">
-          <label>
-            UAH{" "}
-            <input
-              value={JSON.parse(sessionStorage.test)["UAH"]}
-              name="UAH"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        <div className="field">
-          <label>
-            PLN{" "}
-            <input
-              value={JSON.parse(sessionStorage.test)["PLN"]}
-              name="PLN"
-              type="number"
-              className="inputField"
-              onChange={(ev) => setCurrency(ev.target.name)}
-            ></input>
-          </label>
-        </div>
-        {arrForField}
+        <DefaultFields />
+        {arrForField.map((e) => {
+          return (
+            <>
+              <div className="field">
+                <label>
+                  {e}{" "}
+                  <input
+                    value={
+                      store.getState() * JSON.parse(sessionStorage.test)[e] !==
+                      0
+                        ? store.getState() * JSON.parse(sessionStorage.test)[e]
+                        : ""
+                    }
+                    name={e}
+                    type="number"
+                    min="0"
+                    className="inputField"
+                    onChange={function (ev) {
+                      setCurrency(ev.target.name);
+                      store.dispatch({
+                        type: "VALUE",
+                        val: ev.target.value,
+                      });
+
+                      setVal(store.getState());
+                    }}
+                  ></input>
+                </label>
+              </div>
+            </>
+          );
+        })}
         <div className="addVal">
           <label>
             Добавить валюту{" "}
             <select
-              onChange={(ev) =>
+              onChange={(ev) => {
                 setField(
-                  (arr) => [
-                    ...arr,
-                    <div className="field">
-                      <label>
-                        {ev.target.value}{" "}
-                        <input
-                          key={ev}
-                          name={ev.target.value}
-                          type="number"
-                          className="inputField"
-                          onChange={(ev) => setCurrency(ev.target.name)}
-                        ></input>
-                      </label>
-                    </div>,
-                  ],
+                  (arr) => [...arr, ev.target.value],
                   optionArr.splice(
                     optionArr.findIndex(
                       (e) => ev.target.value === e.props.value
                     ),
                     1
                   )
-                )
-              }
+                );
+              }}
             >
               {optionArr}
             </select>
